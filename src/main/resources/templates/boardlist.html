@@ -20,17 +20,16 @@
           <tr>
               <th>글번호</th>
               <th>제목</th>
-              <th></th>
-              <th>시간</th>
+              <th>작성일</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="board : ${list}">
-              <td th:text="${board.id}">1</td>
-              <td th:text="${board.title}">
-                  <td>
-                    <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}"></a>
-                  </td>
+              <td th:text="${board.id}" style="text-align: center">1</td>
+              <td>
+                  <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}" style="text-align: center"></a>
+              </td>
+              <td th:text="${#temporals.format(board.date, 'yyyy-MM-dd HH:mm')}"></td>
           </tr>
         </tbody>
       </table>

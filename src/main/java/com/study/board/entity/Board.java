@@ -7,11 +7,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity // table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Data
 public class Board{ // Board table에 관한 정보
     @Id // Primary Key
@@ -21,16 +23,15 @@ public class Board{ // Board table에 관한 정보
     private String content;
     private String filename;
     private String filepath;
-
-//    private String createdDate;
+    @CreatedDate
+    private LocalDateTime date;
 
     @Builder
-    public Board(Integer id, String title, String content, String filename, String filepath, String createdDate){
+    public Board(Integer id, String title, String content, String filename, String filepath){
         this.id = id;
         this.title = title;
         this.content = content;
         this.filename = filename;
         this.filepath = filepath;
-//        this.createdDate = createdDate;
     }
 }

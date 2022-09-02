@@ -1,5 +1,6 @@
 package com.study.board.controller;
 
+import com.study.board.dto.BoardDto;
 import com.study.board.entity.Board;
 import com.study.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class BoardController {
     }
 
     @PostMapping("/board/writepro")
-    public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception{
+    public String boardWritePro(BoardDto boardDto, Model model, MultipartFile file) throws Exception{
 
-        boardService.write(board, file);
+        boardService.write(boardDto, file);
         model.addAttribute("message", "글 작성이 완료되었습니다.");
 //        model.addAttribute("message", "글 작성을 실패하였습니다.");
 //        model.addAttribute("searchUrl", "/board/list");
@@ -40,7 +41,7 @@ public class BoardController {
     @GetMapping("/")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
-        Page<Board> list = null;
+        Page<BoardDto> list = null;
         if(searchKeyword == null){
             list = boardService.boardList(pageable);
         }else{
@@ -65,8 +66,9 @@ public class BoardController {
     }
     @GetMapping("/board/view") // localhost:8080/board/view?id = 1
     public String boardView(Model model, Integer id){
-        model.addAttribute("board", boardService.boardView(id));
-        return "boardview";
+        BoardDto boardDto = boardService.boardView(id);
+        model.addAttribute("boardDto", boardDto);
+        return "boardView";
     }
 
     @GetMapping("/board/delete")
@@ -78,17 +80,21 @@ public class BoardController {
 
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("board", boardService.boardView(id));
+        BoardDto boardDto = boardService.boardView(id);
+        model.addAttribute("boardDto", boardDto);
+//        model.addAttribute("board", boardService.boardView(id));
         return "boardmodify";
     }
 
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Board board, MultipartFile file) throws Exception{
-        Board boardTemp = boardService.boardView(id); // 기준에 있는 객체 불러온
-        boardTemp.setTitle(board.getTitle());
-        boardTemp.setContent(board.getContent()); // 새로 작성한 내용을 적용
-        boardService.write(boardTemp, file);
+    public String boardUpdate(@PathVariable("id") Integer id, BoardDto boardDto, MultipartFile file, Model model) throws Exception{
+//        Board boardTemp = boardService.boardView(id); // 기준에 있는 객체 불러온
+//        boardTemp.setTitle(boardDto.getTitle());
+//        boardTemp.setContent(boardDto.getContent()); // 새로 작성한 내용을 적용
+//        boardService.write(boardTemp, file);
 //        return "redirect:/board/list";
+        // 파일이 안넘어옴
+        boardService.write(boardDto, file);
         return "redirect:/";
     }
 }

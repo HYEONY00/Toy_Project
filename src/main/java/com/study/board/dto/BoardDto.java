@@ -14,7 +14,7 @@ public class BoardDto {
     private String content;
     private String filename;
     private String filepath;
-//    private String createdDate;
+    private LocalDateTime date;
 
 
     public Board toEntity(){
@@ -24,26 +24,25 @@ public class BoardDto {
                 .content(content)
                 .filename(filename)
                 .filepath(filepath)
-//                .createdDate(createdDate)
                 .build();
         return board;
     }
     @Builder
-    public BoardDto(Integer id, String title, String content, String filename, String filepath, String createdDate){
+    public BoardDto(Integer id, String title, String content, String filename, String filepath, LocalDateTime date){
         this.id = id;
         this.title = title;
         this.content = content;
         this.filename = filename;
         this.filepath = filepath;
-//        this.createdDate = createdDate;
+        this.date = date;
     }
     @Builder
     public BoardDto(Board board){
         this.id = board.getId();
-        this.title = title;
-        this.content = content;
-        this.filename = filename;
-        this.filepath = filepath;
-//        this.createdDate = createdDate;
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.filename = board.getFilename();
+        this.filepath = board.getFilepath();
+        this.date = board.getDate();
     }
 }
