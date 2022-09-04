@@ -1,6 +1,8 @@
 package com.study.board.entity;
 
+import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.cfg.annotations.reflection.internal.XMLContext;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

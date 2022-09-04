@@ -29,7 +29,7 @@ public class BoardDto {
                 .filename(filename)
                 .filepath(filepath)
                 .writer(writer)
-                .view_cnt(view_cnt)
+                .view_cnt(0)
                 .build();
         return board;
     }

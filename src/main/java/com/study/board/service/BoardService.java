@@ -59,7 +59,8 @@ public class BoardService {
         this.boardRepository.deleteById(id);
     }
 
-    public int updateCount(Integer id){
+    @Transactional
+    public int updateCount(Integer id) {
         return this.boardRepository.updateCount(id);
     }
 }
