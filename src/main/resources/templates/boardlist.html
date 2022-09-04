@@ -7,9 +7,9 @@
 
 <style>
   .layout {
-    width: 500px;
+    width: 600px;
     margin: 0 auto;
-    margin-top: 40px;
+    margin-top: 50px;
   }
 </style>
 
@@ -20,16 +20,20 @@
           <tr>
               <th>글번호</th>
               <th>제목</th>
+              <th>작성자</th>
               <th>작성일</th>
+              <th>조회수</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="board : ${list}">
-              <td th:text="${board.id}" style="text-align: center">1</td>
-              <td>
-                  <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}" style="text-align: center"></a>
+              <td th:text="${board.id}" style="text-align : center">1</td>
+              <td style="text-align : center">
+                  <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}"></a>
               </td>
+              <td th:text="${board.writer}" style="text-align : center"></td>
               <td th:text="${#temporals.format(board.date, 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:text="${board.view_cnt}"></td>
           </tr>
         </tbody>
       </table>

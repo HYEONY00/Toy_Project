@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+
 import static org.springframework.data.jpa.domain.AbstractAuditable_.createdDate;
 
 @Controller
@@ -30,10 +32,8 @@ public class BoardController {
     @PostMapping("/board/writepro")
     public String boardWritePro(BoardDto boardDto, Model model, MultipartFile file) throws Exception{
 
-        boardService.write(boardDto, file);
+        this.boardService.write(boardDto, file);
         model.addAttribute("message", "글 작성이 완료되었습니다.");
-//        model.addAttribute("message", "글 작성을 실패하였습니다.");
-//        model.addAttribute("searchUrl", "/board/list");
         model.addAttribute("searchUrl", "/");
         return "message";
     }
@@ -43,9 +43,9 @@ public class BoardController {
                             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
         Page<BoardDto> list = null;
         if(searchKeyword == null){
-            list = boardService.boardList(pageable);
+            list = this.boardService.boardList(pageable);
         }else{
-            list = boardService.boardSearchList(searchKeyword, pageable);
+            list = this.boardService.boardSearchList(searchKeyword, pageable);
         }
 
         if (list.getTotalElements() == 0){ // 검색결과 없으면 /board/list
@@ -54,6 +54,7 @@ public class BoardController {
             model.addAttribute("searchUrl", "/");
             return "message";
         }
+
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
@@ -64,23 +65,25 @@ public class BoardController {
 
         return "boardlist";
     }
+    @Transactional
     @GetMapping("/board/view") // localhost:8080/board/view?id = 1
     public String boardView(Model model, Integer id){
-        BoardDto boardDto = boardService.boardView(id);
+        BoardDto boardDto = this.boardService.boardView(id);
+        boardDto.setView_cnt(boardService.updateCount(id));
         model.addAttribute("boardDto", boardDto);
         return "boardView";
     }
 
     @GetMapping("/board/delete")
     public String boardDelete(Integer id){
-        boardService.boardDelete(id);
+        this.boardService.boardDelete(id);
 //        return "redirect:/board/list";
         return "redirect:/";
     }
 
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model){
-        BoardDto boardDto = boardService.boardView(id);
+        BoardDto boardDto = this.boardService.boardView(id);
         model.addAttribute("boardDto", boardDto);
 //        model.addAttribute("board", boardService.boardView(id));
         return "boardmodify";
@@ -94,7 +97,7 @@ public class BoardController {
 //        boardService.write(boardTemp, file);
 //        return "redirect:/board/list";
         // 파일이 안넘어옴
-        boardService.write(boardDto, file);
+        this.boardService.write(boardDto, file);
         return "redirect:/";
     }
 }

@@ -37,28 +37,29 @@ public class BoardService {
 
         boardDto.setFilename(fileName); // 저장된 파일 이름
         boardDto.setFilepath("/files/" + saveFile); // 저장된 파일의 경로와 이름
-        boardRepository.save(boardDto.toEntity()).getId();
+        this.boardRepository.save(boardDto.toEntity()).getId();
     }
 
     public Page<BoardDto> boardList(Pageable pageable){ // 게시글 리스트 처리
-        return boardRepository.findAll(pageable).map(BoardDto::new);
+        return this.boardRepository.findAll(pageable).map(BoardDto::new);
     }
 
     public Page<BoardDto> boardSearchList(String searchKeyword, Pageable pageable){
-        return boardRepository.findByTitleContaining(searchKeyword, pageable).map(BoardDto::new);
+        return this.boardRepository.findByTitleContaining(searchKeyword, pageable).map(BoardDto::new);
     }
     //특정 게시글 불러오기
     public BoardDto boardView(Integer id){
-        Board board = boardRepository.findById(id).get();
+        Board board = this.boardRepository.findById(id).get();
         BoardDto boardDto = new BoardDto(board);
         return boardDto;
-        // board 생성자
-        // board dto 생성자 넘겨서
-        // return dto
     }
 
     // 특정 게시글 삭제
     public void boardDelete(Integer id){
-        boardRepository.deleteById(id);
+        this.boardRepository.deleteById(id);
+    }
+
+    public int updateCount(Integer id){
+        return this.boardRepository.updateCount(id);
     }
 }
